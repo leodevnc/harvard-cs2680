@@ -1,27 +1,27 @@
-# Assignment 1 — 직접 작성할 관찰 기록
+# Assignment 1 — Personal Observation Template
 
-이 문서는 제출용 완성 보고서가 아닙니다. 실제 실행 후 본인의 관찰로 작성하세요.
+This is not a completed submission report. Fill it in with your own observations after actual runs.
 
-## 1. 구현과 개선
+## 1. Implementation and improvements
 
-- 직접 사용한 화면 스크린샷:
-- 구현 내용에 대한 본인의 설명:
-- 기본 기능 외에 유용했던 개선과 그 이유:
+- Screenshots of the interface you used:
+- Your own explanation of the implementation:
+- Useful improvements beyond the basic requirements, and why they helped:
 
-## 2. 실제 세션에서 배운 점
+## 2. Lessons from real sessions
 
-각 항목에 실제 세션 ID, 도구 호출 ID 또는 시간과 관련 이벤트를 기재하세요.
+For each item, include the actual session ID, tool call ID or timestamp, and relevant events.
 
-1. 에이전트가 예상과 다르게 문제를 접근한 순간:
-2. 실패 또는 예상 밖 결과를 발견한 순간과 발견 방법:
-3. 다음 작업에서 프롬프트·범위·감독 방식을 어떻게 바꿀지:
+1. A moment when the agent approached the problem differently from what you expected:
+2. A failure or unexpected result you noticed, and how you discovered it:
+3. How you would change your prompt, scope, or supervision for the next task:
 
-## 3. Claude Code에서 바꾸고 싶은 한 가지
+## 3. One thing you would change in Claude Code
 
-- 바꾸고 싶은 동작:
-- 이를 뒷받침하는 실제 세션의 구체적 근거:
+- The behavior you would change:
+- Specific evidence from a real session that supports this change:
 
-## AI 활용 공개
+## AI use disclosure
 
-초기 앱 구현과 자동 테스트 작성에 OpenAI Codex를 사용했습니다.
-추가로 사용한 도구, 직접 수행한 변경, Claude Code 사용 세션을 기재하세요.
+OpenAI Codex was used for the initial app implementation and automated tests.
+List any additional tools, changes you made yourself, and sessions in which you used Claude Code.

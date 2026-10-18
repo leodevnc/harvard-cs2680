@@ -1,18 +1,18 @@
 # Assignment 3 — Mads-Opt
 
-`starter_code/src/agentic_loop.py`의 `Agent(dispatcher).run()`이 진입점입니다.
-**공식 starter 압축파일을 내려받지 못해 실제 인프라와의 통합 검증은 아직 하지 못했습니다.**
-src 구현은 공개된 dispatcher 계약에 근거하며, 나머지 공식 파일은 설치 스크립트로 가져옵니다.
+The entry point is `Agent(dispatcher).run()` in `starter_code/src/agentic_loop.py`.
+**Integration with the actual infrastructure remains unverified because the official starter archive could not be downloaded.**
+The src implementation follows the public dispatcher contract; the installation script retrieves the remaining official files.
 
-## 실행
+## Running the agent
 
 ```bash
-# 저장소 루트
+# From the repository root
 python3 scripts/install_official.py 3
 python3 scripts/check_starter.py
 cd assignment3/starter_code
 bash evaluation_scripts/prepare_images.sh
-export CS2680_API_KEY='본인의 수업 키'
+export CS2680_API_KEY='your-course-key'
 export CS2680_MODEL_STANDARD=standard
 export CS2680_MODEL_EXPERT=expert
 export CS2680_MODEL_STARTER=starter
@@ -20,44 +20,46 @@ python3 evaluation_scripts/run_all.py --limit 0
 python3 evaluation_scripts/run_all.py
 ```
 
-`CS2680_BASE_URL`은 공식 runner가 container에 전달하는 egress proxy 주소를 사용합니다.
-임의로 외부 API 주소를 하드코딩하지 않습니다. 모델 요청은 course proxy를 통해서만 나갑니다.
-원본 sandbox.py와 sandbox_server.py는 설치 시 보존합니다.
+`CS2680_BASE_URL` uses the egress proxy address passed into the container by the official runner.
+No arbitrary external API address is hardcoded. Model requests go through the course proxy only.
+The original sandbox.py and sandbox_server.py are preserved during installation.
 
-## 구현한 최적화
+## Implemented optimizations
 
-| 선택 | 이유와 비용 |
+| Choice | Rationale and tradeoff |
 |---|---|
-| 기본 2개, 최대 5개 task worker | 서로 다른 task의 API·평가 대기를 겹침. 동시 실행 비용은 공유 budget으로 제한 |
-| standard부터 시작, 재평가 실패/도구 오류 반복 시 expert | 비용 절감 가설. 실제 정확도 개선은 측정 전 |
-| 최대 2회 평가 | 실패 task에 무한히 시간을 쓰지 않음. 어려운 task를 조기에 포기할 수 있음 |
-| 읽기 결과 캐시 | 반복 읽기 감소. write/edit/bash 후 전체 캐시 무효화 |
-| 연속 read/search만 병렬화 | write와 의존 순서를 보존하면서 독립 읽기를 겹침 |
-| 6,000자 tool output, 65,000자 context | 입력 비용 감소. 긴 의존관계의 정보 손실 가능 |
-| shared dollar budget | 입력 바이트 기반 보수적 예약 후 실제 usage로 정산. 공식 청구액과 동일함을 보장하지 않음 |
+| 2 task workers by default, up to 5 | Overlap API and evaluation waits across tasks; a shared budget limits concurrent spending |
+| Start with standard, escalate to expert after a failed evaluation or repeated tool errors | Hypothesis for reducing cost; actual accuracy improvements have not been measured |
+| At most 2 evaluations by default | Avoid spending unlimited time on failing tasks; difficult tasks may be abandoned early |
+| Read-result cache | Reduce repeated reads; invalidate the entire cache after write/edit/bash |
+| Parallelize consecutive read/search calls only | Overlap independent reads while preserving write ordering and dependencies |
+| 6,000-character tool output and 65,000-character context | Reduce input cost; information about long dependencies may be lost |
+| Shared dollar budget | Reserve conservatively using input bytes, then reconcile with actual usage; not guaranteed to match official billing |
 
-설정: `CS2680_WORKERS` (1–5), `CS2680_MAX_ATTEMPTS` (1–3),
-`CS2680_HARNESS_BUDGET` (기본 $8). 공식 $10 상한에 여유를 두었습니다.
-가격은 2026-10-18 과제 페이지 기준이며 `src/budget.py`에 명시했습니다.
-실행 중 모델 청구/캐시 정책이 다르면 업데이트해야 합니다. 이 예산은 서버 과금을 막는 보증이 아닙니다.
+Settings: `CS2680_WORKERS` (1–5), `CS2680_MAX_ATTEMPTS` (1–3), and
+`CS2680_HARNESS_BUDGET` (default $8, leaving room below the official $10 limit).
+Prices in `src/budget.py` are based on the assignment page as of 2026-10-18.
+Update them if model billing or caching policies differ at runtime. This budget does not guarantee
+a cap on server-side charges.
 
-`starter` tier 설정은 지원하지만 기본 정책은 사용하지 않습니다.
-멀티에이전트 추론은 구현하지 않았고, task 및 읽기 도구의 병렬 실행을 구현했습니다.
+Configuration supports the `starter` tier, but the default policy does not use it.
+The implementation parallelizes tasks and read tools; it does not implement multi-agent reasoning.
 
-## 공식 연동 확인 지점
+## Official integration checks
 
-- `Sandbox.exec(command)` → stdout/stderr/exit_code (또는 returncode) dict.
-- `Sandbox.read_text(path)` → str, `write_text(path, text)`.
-- `dispatcher.logger(k)`는 event별 method 또는 `log/emit(event, **fields)` 또는 `write(row)`.
-- 실제 logger 인자가 다르면 `src/adapters.py`의 `dispatcher_sink`만 수정하세요.
-- official dispatcher의 shutdown/동시성 동작은 실제 preflight 후 확인해야 합니다.
+- `Sandbox.exec(command)` → a dictionary with stdout/stderr/exit_code (or returncode).
+- `Sandbox.read_text(path)` → str; `write_text(path, text)`.
+- `dispatcher.logger(k)` supports event-specific methods, `log/emit(event, **fields)`, or `write(row)`.
+- If the actual logger arguments differ, update `dispatcher_sink` in `src/adapters.py`.
+- Verify the official dispatcher's shutdown and concurrency behavior in a real preflight run.
 
-테스트용 dispatcher로 `next_task → patch → evaluate → continue → done`,
-0개 테스트의 오판 방지, 예산 초과 전 요청 차단을 검증했습니다.
-이 결과는 leaderboard 성공률이나 official logger 호환성의 증거가 아닙니다.
+A test dispatcher verified `next_task → patch → evaluate → continue → done`, prevention of false
+success with zero tests, and request blocking before exceeding the budget. These results do not
+establish leaderboard success rates or compatibility with the official logger.
 
-제출용으로는 `src/` 폴더만 zip에 담습니다. 원본 runtime을 수정한 경우 먼저
-저장소 루트에서 `python3 scripts/sync_runtime.py`를 실행하세요.
-실제 리더보드 제출, 학생 이름 설정, 세션 아카이브와 본인 작성 PDF·영상은 수행하지 않았습니다.
+For submission, include only the `src/` folder in the zip. If you change the canonical runtime,
+first run `python3 scripts/sync_runtime.py` from the repository root.
+Leaderboard submission, student name configuration, session archives, and your own PDF and video
+have not been completed.
 
-공식 명세: https://cs2680.com/assignments/assignment3
+Official specification: https://cs2680.com/assignments/assignment3
