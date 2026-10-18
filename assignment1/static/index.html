@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mads-Lens · Agent Observatory</title><link rel="stylesheet" href="/style.css"></head>
+<body><header><div class="brand"><span class="logo">M</span><div>MADS / LENS<small>CS2680 · ASSIGNMENT 01</small></div></div><div class="local">● LOCAL WORKSPACE</div></header>
+<div class="layout"><aside><p class="eyebrow">OBSERVATORY</p><h2>작업의 흐름을<br>한눈에.</h2><p class="muted">도구 호출을 선택하면<br>해당 단계로 이동합니다.</p><nav id="outline" aria-label="도구 호출 목차"></nav><div class="aside-bottom">01 / WATCH THE AGENT WORK</div></aside>
+<main><section class="intro"><p class="eyebrow">THE AGENT, IN FOCUS</p><h1>무엇을, 어떻게<br><span>해결하고 있을까요?</span></h1><p>프롬프트부터 마지막 도구 호출까지, 에이전트의 실행 과정을 살펴보세요.</p></section>
+<section class="settings"><label>실행 모드<select id="mode"><option value="replay">재생 데모 · 합성 데이터</option><option value="live">실제 Claude Code</option><option value="failure">실패 재생 · 합성 데이터</option></select></label><label class="folder">작업 폴더 <input id="cwd" value="." autocomplete="off"></label><button id="new" class="secondary">새 세션</button></section>
+<p id="workspace" class="workspace"></p><div class="session-row"><span id="session">새 대화</span><button id="export" class="text-button">JSONL 내보내기 ↓</button></div>
+<div id="runs" aria-live="polite"><div class="empty"><div>↗</div><h3>첫 번째 실행을 시작하세요.</h3><p>데모에서는 읽기 → 서브에이전트 → 테스트 → 수정 과정을 재생합니다.</p></div></div>
+<form id="composer"><label for="prompt" class="eyebrow">YOUR NEXT INSTRUCTION</label><textarea id="prompt" rows="3" required placeholder="예: demo_project의 실패하는 테스트를 확인하고 수정해줘.">실패하는 평균 계산 테스트를 확인하고 수정해줘. 서브에이전트로 코드를 먼저 살펴봐.</textarea><div class="composer-bottom"><span id="hint">재생 모드에서는 입력 내용과 관계없이 같은 합성 예시를 보여줍니다.</span><button id="stop" type="button" class="secondary" disabled>중단</button><button id="submit" type="submit">실행하기 ↗</button></div></form><p id="error" role="alert"></p>
+<footer>CLAUDE CODE STREAM VIEWER <span>Built to make agent work visible.</span></footer></main></div><script type="module" src="/app.js"></script></body></html>

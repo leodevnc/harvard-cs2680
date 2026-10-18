@@ -1,0 +1,11 @@
+{
+  "model": "mads-7b",
+  "max_iterations": 45,
+  "max_output_tokens": 1536,
+  "max_total_tokens": 150000,
+  "max_context_chars": 24000,
+  "timeout_s": 1200,
+  "output_limit": 3500,
+  "cache_reads": true,
+  "parallel_reads": true
+}

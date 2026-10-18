@@ -1,0 +1,14 @@
+[
+  "Clamp SOC to the inclusive [0, 100] range. Explain the Python implementation.",
+  "Convert power in kW integrated over seconds into energy in kWh. Explain the Python implementation.",
+  "Deliverable AC energy is stored DC energy times discharge efficiency. Explain the Python implementation.",
+  "Site SOC is the capacity-weighted mean of rack SOC values. Explain the Python implementation.",
+  "Clamp SOC to the inclusive [0, 100] range. Explain the Python implementation.",
+  "Convert power in kW integrated over seconds into energy in kWh. Explain the Python implementation.",
+  "Deliverable AC energy is stored DC energy times discharge efficiency. Explain the Python implementation.",
+  "Site SOC is the capacity-weighted mean of rack SOC values. Explain the Python implementation.",
+  "Clamp SOC to the inclusive [0, 100] range. Explain the Python implementation.",
+  "Convert power in kW integrated over seconds into energy in kWh. Explain the Python implementation.",
+  "Deliverable AC energy is stored DC energy times discharge efficiency. Explain the Python implementation.",
+  "Site SOC is the capacity-weighted mean of rack SOC values. Explain the Python implementation."
+]

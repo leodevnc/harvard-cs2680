@@ -1,0 +1,62 @@
+[
+  {
+    "id": "soc_clamp",
+    "repo": "ess/soc_clamp",
+    "problem": "Clamp SOC to the inclusive [0, 100] range.",
+    "test_command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v"
+    ],
+    "protected_files": [
+      "test_battery.py"
+    ]
+  },
+  {
+    "id": "energy_units",
+    "repo": "ess/energy_units",
+    "problem": "Convert power in kW integrated over seconds into energy in kWh.",
+    "test_command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v"
+    ],
+    "protected_files": [
+      "test_battery.py"
+    ]
+  },
+  {
+    "id": "discharge_efficiency",
+    "repo": "ess/discharge_efficiency",
+    "problem": "Deliverable AC energy is stored DC energy times discharge efficiency.",
+    "test_command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v"
+    ],
+    "protected_files": [
+      "test_battery.py"
+    ]
+  },
+  {
+    "id": "weighted_soc",
+    "repo": "ess/weighted_soc",
+    "problem": "Site SOC is the capacity-weighted mean of rack SOC values.",
+    "test_command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "-v"
+    ],
+    "protected_files": [
+      "test_battery.py"
+    ]
+  }
+]

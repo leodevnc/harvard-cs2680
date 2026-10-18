@@ -1,0 +1,27 @@
+name: Offline tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Runtime and integration tests
+        run: python -m unittest discover -s tests -v
+      - name: Synthetic ESS integration demo
+        run: python scripts/offline_demo.py
+      - name: Standalone submission consistency
+        run: python scripts/sync_runtime.py --check
+      - name: Assignment 1 backend
+        working-directory: assignment1
+        run: python -m unittest discover -s tests -v
+      - name: Assignment 1 event reducer
+        working-directory: assignment1
+        run: node --test tests/model.test.js
